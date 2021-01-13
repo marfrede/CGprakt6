@@ -263,7 +263,6 @@ void Model::applyMaterial(unsigned int index)
 
 	PhongShader* pPhong = dynamic_cast<PhongShader*>(shader());
 	if (!pPhong) {
-		std::cout << "Model::applyMaterial(): WARNING Invalid shader-type. Please apply PhongShader for rendering models.\n";
 		return;
 	}
 
