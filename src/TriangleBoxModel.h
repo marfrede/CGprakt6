@@ -25,6 +25,8 @@ public:
 protected:
     VertexBuffer VB;
     IndexBuffer IB;
+private:
+    void drawSquare(float W, float H, float D, const Vector normal);
 };
 
 

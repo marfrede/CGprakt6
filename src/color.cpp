@@ -3,34 +3,52 @@
 
 Color::Color()
 {
-  // TODO: add your code
 }
 
-Color::Color( float r, float g, float b)
+Color::Color(float r, float g, float b)
 {
-	// TODO: add your code
+	this->R = r;
+	this->G = g;
+	this->B = b;
 }
 
 Color Color::operator*(const Color& c) const
 {
-	// TODO: add your code
-    return Color(); // dummy (remove)
+	return Color(
+		this->R * c.R,
+		this->G * c.G,
+		this->B * c.B
+	);
 }
 
 Color Color::operator*(const float Factor) const
 {
-	// TODO: add your code
-	return Color(); // dummy (remove)
+	return Color(
+		this->R * Factor,
+		this->G * Factor,
+		this->B * Factor
+	);
 }
 
 Color Color::operator+(const Color& c) const
 {
-	// TODO: add your code
-	return Color(); // dummy (remove)
+	return Color(
+		this->R + c.R,
+		this->G + c.G,
+		this->B + c.B
+	);
 }
 
 Color& Color::operator+=(const Color& c)
 {
-	// TODO: add your code
-	return *this; // dummy (remove)
+	this->R += c.R;
+	this->G += c.G;
+	this->B += c.B;
+	return *this;
+}
+
+std::ostream& operator<<(std::ostream& strm, const Color& C) {
+	return strm << "{"
+		<< "R: " << C.R << ", G:" << C.G << ", B:" << C.B
+		<< "} ";
 }
