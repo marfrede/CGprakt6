@@ -29,7 +29,8 @@ void main()
     vec3 L = normalize(LightPos-Position);
     vec3 E = normalize(EyePos-Position);
     vec3 R = reflect(-L,N);
+    vec3 H = normalize(L+E);
     vec3 DiffuseComponent = LightColor * DiffuseColor * sat(dot(N,L));
-    vec3 SpecularComponent = LightColor * SpecularColor * pow( sat(dot(R,E)), SpecularExp);
+    vec3 SpecularComponent = LightColor * SpecularColor * pow( sat(dot(N,H)), SpecularExp);
     FragColor = vec4((DiffuseComponent + AmbientColor)*DiffTex.rgb + SpecularComponent ,DiffTex.a);
 }
