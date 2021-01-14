@@ -180,10 +180,21 @@ void Model::loadMaterials(const aiScene* pScene)
 			aiString texturename;
 			aiGetMaterialString(aiMaterial, AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), &texturename);
 			string str = texturename.C_Str();
-			//cout << "(Path + str): " << (Path + str) << endl;
-			const Texture* texture = Texture::LoadShared((Path + str).c_str());
 
-			this->pMaterials[mIndex].DiffTex = texture;
+			// the diffuse texture files with the name <name>.<ext> (AI_MATKEY_TEXTURE_DIFFUSE) are loaded HERE
+			//cout << "diffuse file:" << (Path + str).c_str() << endl;
+			const Texture* texture = Texture::LoadShared((Path + str).c_str());
+			this->pMaterials[mIndex].DiffTex = texture; 
+
+			// todo: Check if a NormalMap with the name <name>_n.<ext> exists.
+			// todo: If so, load this file as Normal - Map(extend the structure Model::Material for this).
+			// 1. get filename
+			size_t dotIndex = str.find_last_of('.'); // find the dot in <name>.<ext>
+			str = str.replace(dotIndex, 0, "_n"); // append "_n" to "."
+			cout << "normal file: " << (Path + str).c_str() << endl;
+			// 2. load normals
+			const Texture* normal = Texture::LoadShared((Path + str).c_str()); // null if not found
+			this->pMaterials[mIndex].NormalMap = normal;
 		}
 	}
 }
