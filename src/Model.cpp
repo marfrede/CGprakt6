@@ -297,6 +297,8 @@ void Model::applyMaterial(unsigned int index)
 	pPhong->specularExp(pMat->SpecExp);
 	pPhong->specularColor(pMat->SpecColor);
 	pPhong->diffuseTexture(pMat->DiffTex);
+	// cgprakt 6
+	pPhong->normalTexture(pMat->NormalMap);
 }
 
 void Model::draw(const BaseCamera& Cam)
