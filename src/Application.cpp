@@ -43,49 +43,49 @@ Application::Application(GLFWwindow* pWin) : pWindow(pWin), Cam(pWin), pModel(NU
 }
 void Application::start()
 {
-    glEnable (GL_DEPTH_TEST); // enable depth-testing
-    glDepthFunc (GL_LESS); // depth-testing interprets a smaller value as "closer"
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glEnable(GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEPTH_TEST); // enable depth-testing
+	glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Application::update(float dtime)
 {
-    Cam.update();
+	Cam.update();
 }
 
 void Application::draw()
 {
 	ShadowGenerator.generate(Models);
-	
-    // 1. clear screen
-    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// 1. clear screen
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	ShaderLightMapper::instance().activate();
-    // 2. setup shaders and draw models
-    for( ModelList::iterator it = Models.begin(); it != Models.end(); ++it )
-    {
-        (*it)->draw(Cam);
-    }
+	// 2. setup shaders and draw models
+	for (ModelList::iterator it = Models.begin(); it != Models.end(); ++it)
+	{
+		(*it)->draw(Cam);
+	}
 	ShaderLightMapper::instance().deactivate();
-	
-    // 3. check once per frame for opengl errors
-    GLenum Error = glGetError();
-    assert(Error==0);
+
+	// 3. check once per frame for opengl errors
+	GLenum Error = glGetError();
+	assert(Error == 0);
 }
 void Application::end()
 {
-    for( ModelList::iterator it = Models.begin(); it != Models.end(); ++it )
-        delete *it;
-    
-    Models.clear();
+	for (ModelList::iterator it = Models.begin(); it != Models.end(); ++it)
+		delete* it;
+
+	Models.clear();
 }
 
 void Application::createScene()
 {
-	Matrix m,n;
+	Matrix m, n;
 
 	pModel = new Model(ASSET_DIRECTORY "skybox.obj", false);
 	pModel->shader(new PhongShader(), true);
@@ -98,20 +98,20 @@ void Application::createScene()
 	m.translation(10, 0, -10);
 	pModel->transform(m);
 	Models.push_back(pModel);
-	
+
 
 	// directional lights
 	DirectionalLight* dl = new DirectionalLight();
 	dl->direction(Vector(0.2f, -1, 1));
 	dl->color(Color(0.25, 0.25, 0.5));
 	dl->castShadows(true);
-	ShaderLightMapper::instance().addLight(dl);
-	
+	ShaderLightMapper::instance().addLight(dl); // 1
+
 	Color c = Color(1.0f, 0.7f, 1.0f);
 	Vector a = Vector(1, 0, 0.1f);
 	float innerradius = 45;
 	float outerradius = 60;
-	
+
 	// point lights
 	PointLight* pl = new PointLight();
 	pl->position(Vector(-1.5, 3, 10));
@@ -135,7 +135,7 @@ void Application::createScene()
 	pl->position(Vector(5.0f, 3, 28));
 	pl->color(c);
 	pl->attenuation(a);
-	ShaderLightMapper::instance().addLight(pl);
+	ShaderLightMapper::instance().addLight(pl); // 5
 
 	pl = new PointLight();
 	pl->position(Vector(-1.5, 3, -8));
@@ -148,13 +148,13 @@ void Application::createScene()
 	pl->color(c);
 	pl->attenuation(a);
 	ShaderLightMapper::instance().addLight(pl);
-	
-	
+
+
 	// spot lights
 	SpotLight* sl = new SpotLight();
 	sl->position(Vector(-1.5, 3, 10));
 	sl->color(c);
-	sl->direction(Vector(1,-4,0));
+	sl->direction(Vector(1, -4, 0));
 	sl->innerRadius(innerradius);
 	sl->outerRadius(outerradius);
 	ShaderLightMapper::instance().addLight(sl);
@@ -173,7 +173,7 @@ void Application::createScene()
 	sl->direction(Vector(1, -4, 0));
 	sl->innerRadius(innerradius);
 	sl->outerRadius(outerradius);
-	ShaderLightMapper::instance().addLight(sl);
+	ShaderLightMapper::instance().addLight(sl); // 10
 
 	sl = new SpotLight();
 	sl->position(Vector(5.0f, 3, 28));
@@ -182,7 +182,7 @@ void Application::createScene()
 	sl->innerRadius(innerradius);
 	sl->outerRadius(outerradius);
 	ShaderLightMapper::instance().addLight(sl);
-	
+
 	sl = new SpotLight();
 	sl->position(Vector(-1.5, 3, -8));
 	sl->color(c);
@@ -190,15 +190,15 @@ void Application::createScene()
 	sl->innerRadius(innerradius);
 	sl->outerRadius(outerradius);
 	ShaderLightMapper::instance().addLight(sl);
-	
+
 	sl = new SpotLight();
 	sl->position(Vector(5.0f, 3, -8));
 	sl->color(c);
 	sl->direction(Vector(-1, -4, 0));
 	sl->innerRadius(innerradius);
 	sl->outerRadius(outerradius);
-	ShaderLightMapper::instance().addLight(sl);
-	
+	ShaderLightMapper::instance().addLight(sl); // 13
+
 }
 
 void Application::createNormalTestScene()
@@ -227,14 +227,14 @@ void Application::createShadowTestScene()
 	pModel = new Model(ASSET_DIRECTORY "bunny.dae", false);
 	pModel->shader(new PhongShader(), true);
 	Models.push_back(pModel);
-	
+
 	// directional lights
 	DirectionalLight* dl = new DirectionalLight();
 	dl->direction(Vector(0, -1, -1));
 	dl->color(Color(0.5, 0.5, 0.5));
 	dl->castShadows(true);
 	ShaderLightMapper::instance().addLight(dl);
-	
+
 	SpotLight* sl = new SpotLight();
 	sl->position(Vector(2, 2, 0));
 	sl->color(Color(0.5, 0.5, 0.5));
