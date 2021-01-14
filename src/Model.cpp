@@ -108,6 +108,20 @@ void Model::loadMeshes(const aiScene* pScene, bool FitSize)
 				this->pMeshes[i].VB.addTexcoord0(0, 0);
 			}
 
+			/** cgprakt6 tangent & bitangent */
+			if (pScene->mMeshes[i]->HasTangentsAndBitangents()) {
+				this->pMeshes[i].VB.addTexcoord1(
+					pScene->mMeshes[i]->mTangents->x,
+					pScene->mMeshes[i]->mTangents->y,
+					pScene->mMeshes[i]->mTangents->z
+				);
+				this->pMeshes[i].VB.addTexcoord2(
+					pScene->mMeshes[i]->mBitangents->x,
+					pScene->mMeshes[i]->mBitangents->y,
+					pScene->mMeshes[i]->mBitangents->z
+				);
+			}
+
 			/** Position */
 			Vector vertex(
 				pScene->mMeshes[i]->mVertices[j].x * scale,
