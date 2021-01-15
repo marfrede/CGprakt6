@@ -107,7 +107,7 @@ void main()
             
         }
     }
-    vec4 DiffTex = texture( DiffuseTexture, Texcoord);
-    FColor += AmbientColor * DiffTex.rgb;
-    FragColor = vec4(FColor, DiffTex.a);
+    vec4 DiffTexNew = texture( DiffuseTexture, Texcoord);
+    FColor += AmbientColor * DiffTexNew.rgb;
+    FragColor = vec4(FColor, DiffTexNew.a);
 }
