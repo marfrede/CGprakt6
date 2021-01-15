@@ -3,6 +3,9 @@
 in vec3 Position;
 in vec3 Normal;
 in vec2 Texcoord;
+// cgprakt6
+in vec3 Tangent;
+in vec3 Bitangent;
 
 out vec4 FragColor;
 
