@@ -19,6 +19,7 @@ uniform vec3 SpecularColor;
 uniform vec3 AmbientColor;
 uniform float SpecularExp;
 uniform sampler2D DiffuseTexture;
+// uniform sampler2D DiffuseTexture;
 
 const int MAX_LIGHTS=14;
 struct Light
@@ -46,13 +47,13 @@ float sat( in float a)
 void main()
 {
     vec3 FColor = vec3(0,0,0);
+    vec4 DiffTex = texture( DiffuseTexture, Texcoord);
+    if(DiffTex.a <0.3f) discard;
     
     for(int i=0; i<LightCount; i++) {
         if(lights[i].Type == 0) {
             
             //POINT
-            vec4 DiffTex = texture( DiffuseTexture, Texcoord);
-            if(DiffTex.a <0.3f) discard;
             vec3 N = normalize(Normal);
             vec3 L = normalize(lights[i].Position-Position);
             vec3 E = normalize(EyePos-Position);
@@ -71,8 +72,6 @@ void main()
         } else if(lights[i].Type == 1) {
             
             //DIRECTIONAL
-            vec4 DiffTex = texture( DiffuseTexture, Texcoord);
-            if(DiffTex.a <0.3f) discard;
             vec3 N = normalize(Normal);
             
             vec3 L = normalize(-lights[i].Direction);
@@ -88,8 +87,6 @@ void main()
         } else if(lights[i].Type == 2) {
             
             //SPOT
-            vec4 DiffTex = texture( DiffuseTexture, Texcoord);
-            if(DiffTex.a <0.3f) discard;
             vec3 N = normalize(Normal);
             vec3 L = normalize(lights[i].Position-Position);
             vec3 E = normalize(EyePos-Position);
