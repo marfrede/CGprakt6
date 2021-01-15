@@ -19,7 +19,7 @@ uniform vec3 SpecularColor;
 uniform vec3 AmbientColor;
 uniform float SpecularExp;
 uniform sampler2D DiffuseTexture;
-// uniform sampler2D DiffuseTexture;
+uniform sampler2D NormalTexture;
 
 const int MAX_LIGHTS=14;
 struct Light
@@ -46,17 +46,26 @@ float sat( in float a)
 
 void main()
 {
+
+    mat3 NormalMat = mat3(Tangent, Bitangent, Normal);
+    vec4 NormalText = texture(NormalTexture, Texcoord);
+    vec3 NormalFromNormalMap = vec3(NormalText.r * 2 - 1, NormalText.g * 2 - 1, NormalText.b * 2 - 1);
+    vec3 NewNormal = NormalMat * NormalFromNormalMap;
+
     vec3 FColor = vec3(0,0,0);
+
     vec4 DiffTex = texture( DiffuseTexture, Texcoord);
     if(DiffTex.a <0.3f) discard;
+
+    // vec3 N = normalize(Normal);
+    vec3 N = normalize(NewNormal);
+    vec3 E = normalize(EyePos-Position);
     
     for(int i=0; i<LightCount; i++) {
         if(lights[i].Type == 0) {
             
             //POINT
-            vec3 N = normalize(Normal);
             vec3 L = normalize(lights[i].Position-Position);
-            vec3 E = normalize(EyePos-Position);
             vec3 R = reflect(-L,N);
             vec3 H = normalize(L+E);
             
@@ -72,11 +81,7 @@ void main()
         } else if(lights[i].Type == 1) {
             
             //DIRECTIONAL
-            vec3 N = normalize(Normal);
-            
             vec3 L = normalize(-lights[i].Direction);
-            
-            vec3 E = normalize(EyePos-Position);
             vec3 R = reflect(-L,N);
             vec3 H = normalize(L+E);
             vec3 DiffuseComponent = lights[i].Color * DiffuseColor * sat(dot(N,L));
@@ -87,9 +92,7 @@ void main()
         } else if(lights[i].Type == 2) {
             
             //SPOT
-            vec3 N = normalize(Normal);
             vec3 L = normalize(lights[i].Position-Position);
-            vec3 E = normalize(EyePos-Position);
             vec3 R = reflect(-L,N);
             vec3 H = normalize(L+E);
             
@@ -110,4 +113,5 @@ void main()
     vec4 DiffTexNew = texture( DiffuseTexture, Texcoord);
     FColor += AmbientColor * DiffTexNew.rgb;
     FragColor = vec4(FColor, DiffTexNew.a);
+    // FragColor = vec4(NewNormal, DiffTexNew.a);
 }
